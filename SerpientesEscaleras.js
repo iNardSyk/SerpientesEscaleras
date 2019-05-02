@@ -1,17 +1,67 @@
+class Juego{
+    constructor(tablero, dado){
+        this._tablero = tablero;
+        this._jugadores = [];
+        this._dado = dado;
+        this._ganador = false;
+    }
+
+    iniciarJuego(){
+        this.agregarJugadores();
+        while (this._ganador == false){            
+            this.ronda();
+        }
+    }
+
+    agregarJugadores(){
+        var participantes = prompt("¿Cuántos jugadores desea registrar?");
+            for (let index = 0; index < participantes; index++) {
+                let nombre = prompt("Nombre del jugador: ");
+                let jugadorNuevo = new Jugador(nombre);
+                this._jugadores.push(jugadorNuevo);
+            }
+    }
+
+    moverJugador(index){
+        var avance = this._jugadores[index].posicion + this._dado.girar();
+        if (avance >= 100) {
+            this._ganador = true;
+            console.log("El jugador " + this._jugadores[index].nombre + " ha ganado");
+            return;
+        } else {
+            this._jugadores[index].posicion = avance + this._tablero.casillas[avance];
+            console.log("El jugador " + this._jugadores[index].nombre + " está en la casilla " + (this._jugadores[index].posicion + 1));
+        }
+    }
+
+    ronda(){
+        for (let index = 0; index < this._jugadores.length; index++) {
+            this.moverJugador(index);
+        }
+    }
+}
+
 class Tablero{
     constructor(){
-        this._tablero = [0,0,+58,0,0,+41,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,+21,0,0,0,0,0,0,0,0,0,0,0,0,+41,0,0,0,0,-47,+43,0,0,0,0,0,0,0,0,0,+22,0,0,0,0,0,0,-13,0,0,0,0,0,0,0,0,0,0,0,0,-65,0,0,0,0,0,0,0,0,0,0,0,-50,0,0,0,0,-62,0,0];
-        this._jugadores = [];
+        this._casillas = [0,0,+58,0,0,+41,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,+21,0,0,0,0,0,0,0,0,0,0,0,0,+41,0,0,0,0,-47,+43,0,0,0,0,0,0,0,0,0,+22,0,0,0,0,0,0,-13,0,0,0,0,0,0,0,0,0,0,0,0,-65,0,0,0,0,0,0,0,0,0,0,0,-50,0,0,0,0,-62,0,0];
     }
 
-    set jugador(jugador){
-        this._jugadores.push(jugador);
+    get casillas(){
+        return this._casillas;
+    }
+}
+
+class Dado{
+    constructor(max, min){
+        this.max = max;
+        this.min = min;
     }
 
-    getJugador(num){
-        return this._jugadores[num-1];
+    girar(){
+        var dado = Math.floor(Math.random() * (this.max - this.min)) + this.min;
+        console.log("El dado ha caido en " + dado);
+        return dado;
     }
-
 }
 
 class Jugador{
@@ -31,49 +81,10 @@ class Jugador{
     get nombre(){
         return this._nombre;
     }
-
-    girarDado(){
-        var dado = Math.floor(Math.random() * (7 - 1)) + 1;
-        console.log("El dado ha caido en " + dado);
-        return dado;
-    }
-
-    moverJugador(){
-        var avance = this._posicion + this.girarDado();
-        this._posicion = avance + game1._tablero[avance];
-        console.log("El jugador " + this._nombre + " está en la casilla " + (this._posicion + 1));
-    }
 }
 
-var game1 = new Tablero();
+var dado1 = new Dado(1,6);
+var tablero1 = new Tablero();
+var game1 = new Juego(tablero1, dado1);
 
-var p1 = new Jugador("Nardo", "Perro");
-var p2 = new Jugador("Diana", "Luna");
-
-game1.jugador = p1;
-game1.jugador = p2;
-
-console.log("El jugador " + game1.getJugador(1)._nombre + " está en la casilla " +  game1.getJugador(1)._posicion);
-console.log("El jugador " + game1.getJugador(2)._nombre + " está en la casilla " +  game1.getJugador(2)._posicion);
-
-game1.getJugador(1).moverJugador();
-game1.getJugador(2).moverJugador();
-
-game1.getJugador(1).moverJugador();
-game1.getJugador(2).moverJugador();
-
-game1.getJugador(1).moverJugador();
-game1.getJugador(2).moverJugador();
-
-game1.getJugador(1).moverJugador();
-game1.getJugador(2).moverJugador();
-
-game1.getJugador(1).moverJugador();
-game1.getJugador(2).moverJugador();
-
-game1.getJugador(1).moverJugador();
-game1.getJugador(2).moverJugador();
-
-game1.getJugador(1).moverJugador();
-game1.getJugador(2).moverJugador();
-
+game1.iniciarJuego()

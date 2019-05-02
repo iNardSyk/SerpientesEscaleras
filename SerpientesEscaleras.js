@@ -53,7 +53,7 @@ class Tablero{
 
 class Dado{
     constructor(max, min){
-        this.max = max;
+        this.max = max + 1;
         this.min = min;
     }
 
@@ -83,7 +83,7 @@ class Jugador{
     }
 }
 
-var dado1 = new Dado(1,6);
+var dado1 = new Dado(6,1);
 var tablero1 = new Tablero();
 var game1 = new Juego(tablero1, dado1);
 
